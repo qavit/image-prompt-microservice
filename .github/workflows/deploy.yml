@@ -24,7 +24,7 @@ jobs:
         pip install -r requirements.txt
 
     - name: 建立 Docker 映像
-      run: docker build -t yourusername/yourimage:latest .
+      run: docker build -t siniuhoppvs/image-prompt-ms-repo:latest .
 
     - name: 登入 Docker Hub
       uses: docker/login-action@v1
@@ -33,7 +33,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: 推送 Docker 映像
-      run: docker push yourusername/yourimage:latest
+      run: docker push siniuhoppvs/image-prompt-ms-repo:latest
 
     - name: 部署
       run: |
