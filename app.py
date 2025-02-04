@@ -7,7 +7,6 @@ import requests
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from uvicorn.logging import DefaultFormatter
 
 # 載入自定義的提示詞
 from prompts import (
@@ -27,18 +26,9 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# 設置日誌格式和級別
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(levelprefix)s %(asctime)s - %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-    handlers=[logging.StreamHandler()],
-)
-
-# 使用 Uvicorn 的格式化器
-for handler in logging.getLogger().handlers:
-    handler.setFormatter(DefaultFormatter())
-
+# 設置日誌級別，預設為 DEBUG
+log_level = os.getenv("LOG_LEVEL", "DEBUG").upper()
+logging.basicConfig(level=log_level)
 logger = logging.getLogger()
 
 
@@ -134,7 +124,8 @@ async def generate_image_prompt(
 
         # 返回成功回應
         return ImagePromptResponse(
-            action_background=action_background, character_features=character_features
+            action_background=action_background,
+            character_features=character_features
         )
 
     except requests.exceptions.RequestException:
