@@ -62,7 +62,23 @@ class ImagePromptResponse(BaseModel):
 
 
 @app.post("/", response_model=ImagePromptResponse)
-async def generate_image_prompt(data: ImagePromptRequest):
+async def generate_image_prompt(
+    data: ImagePromptRequest
+) -> ImagePromptResponse:
+    """根據提供的地點、人物和行為生成圖像提示詞。
+
+    此端點接受包含可選參數 `where`、`who` 和 `what` 的 JSON 請求體，
+    構建發送到 OpenAI API 的請求，並返回結構化的圖像提示詞。
+
+    Parameters:
+    - data (ImagePromptRequest): 包含 `where`、`who` 和 `what` 的請求體。
+
+    Returns:
+    - ImagePromptResponse: 回應體，包含 `action_background` 和 `character_features`。
+
+    Raises:
+    - HTTPException: 如果未提供任何參數（`where`、`who`、`what`）。
+    """
     try:
         # 驗證至少有一個參數存在
         if not any([data.where, data.who, data.what]):
