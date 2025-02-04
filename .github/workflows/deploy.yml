@@ -13,28 +13,18 @@ jobs:
     - name: 檢出程式碼
       uses: actions/checkout@v2
 
-    - name: 設定 Python
-      uses: actions/setup-python@v2
+    - name: 部署到 Heroku
+      uses: akhileshns/heroku-deploy@v3.13.15
       with:
-        python-version: '3.12'
+        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+        heroku_app_name: "image-prompt-microservice"
+        heroku_email: "jb22621550@gmail.com"
 
-    - name: 安裝相依套件
+    - name: 設定 Heroku 環境變數
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-
-    - name: 建立 Docker 映像
-      run: docker build -t siniuhoppvs/image-prompt-ms-repo:latest .
-
-    - name: 登入 Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-
-    - name: 推送 Docker 映像
-      run: docker push siniuhoppvs/image-prompt-ms-repo:latest
-
-    - name: 部署
-      run: |
-        # Your deployment commands here
+        heroku config:set OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} --app image-prompt-microservice
+        heroku config:set OPENAI_MODEL=gpt-4o-mini --app image-prompt-microservice
+        heroku config:set OPENAI_API_ENDPOINT=https://api.openai.com/v1/chat/completions --app image-prompt-microservice
+        heroku config:set LOG_LEVEL=INFO --app image-prompt-microservice
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
