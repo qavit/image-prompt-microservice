@@ -87,7 +87,7 @@ async def generate_image_prompt(data: ImagePromptRequest):
             "temperature": 0.7,
         }
 
-        logger.debug(f"\n即將向 OpenAI 發送請求體：\n{payload}\n")
+        logger.debug(f"\n即將向 OpenAI API 發送請求體：\n{payload}\n")
 
         # 設置請求標頭
         headers = {
