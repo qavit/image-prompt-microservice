@@ -6,6 +6,7 @@ import re
 import requests
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 # 載入自定義的提示詞
@@ -24,6 +25,14 @@ app = FastAPI(
     title="圖片提示詞微服務",
     description="此 API 可根據使用者提供的地點、人物和行為生成圖像提示詞。",
     version="1.0.0",
+)
+
+# 設定 CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["POST", "GET", "OPTIONS"],
+    allow_headers=["Content-Type"],
 )
 
 # 設置日誌級別，預設為 DEBUG
