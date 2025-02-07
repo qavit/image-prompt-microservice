@@ -31,8 +31,9 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_methods=["POST", "GET", "OPTIONS"],
-    allow_headers=["Content-Type"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # 設置日誌級別，預設為 DEBUG
